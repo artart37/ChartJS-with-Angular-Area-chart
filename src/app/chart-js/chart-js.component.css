@@ -1,0 +1,151 @@
+.central > .simpleheadline{
+    text-align: center;
+}
+#uploadjson{
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    width: 0;
+}
+
+.filecontainer{
+    background-color: transparent;
+    display: flex;
+    flex-flow: row wrap;
+    position: relative;
+    margin: 4rem 0 0 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    outline: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.uploader{
+    display: flex;
+    flex-flow: column nowrap;
+    position: relative;
+    right: 33px;
+}
+
+.selectedfilecontainer{
+    background-color: #eae8ef;
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 0 36px;
+    height: 100%;
+    min-height: 4.2rem;
+    flex: 0 0 72px;
+    position: relative;
+    box-sizing: border-box;
+    border: none;
+    margin: 0 0 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2.1rem;
+    -webkit-transition:background-color 0.4s ease;
+    -o-transition:background-color 0.4s ease;
+    transition:background-color 0.4s ease;
+}
+
+.selectedfilecontainer:hover{
+    background-color: #D7D3E1;
+}
+.delete{
+    background-image: url("/assets/images/24X24/matdelete.png");
+    background-repeat: no-repeat;
+    background-position:center center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid;
+    border-color:  #D9D7E3;
+    border-radius: 9px;
+    right: 10px;
+    position: absolute;
+    -webkit-transition:all 0.4s ease;
+    -o-transition:all 0.4s ease;
+    transition:all 0.4s ease;
+}
+
+.delete:hover{
+    border-color:  #8D87AC;;
+}
+
+label{
+    flex: 0 0 4.2rem;
+    padding: 0 16px;
+    background: #3f37c9;
+    color: #FFFFFF;
+    cursor: pointer;
+    min-height: 4.2rem;
+    border-radius: 2.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-transition:background-color 0.4s ease;
+    -o-transition:background-color 0.4s ease;
+    transition:background-color 0.4s ease;
+}
+
+label:hover {
+  background-color: #3B119C;
+}
+
+.custommathint{
+    visibility: visible;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    font-size: 75%;
+    color: rgba(0,0,0,.54);
+    display: block;
+    margin: 7px 0 0 0
+}
+.custommaterror{
+    visibility: visible;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    font-size: 75%;
+    color: #f44336;
+    display: block;
+    margin: 7px 0 0 0
+}
+.canvascontainer, .placeholder{
+    width: auto;
+    min-height: 500px;
+    position: relative;
+    box-sizing: border-box;
+    border: 1.5px solid #8f8f8f;
+}
+.placeholder{
+    background-image: url("/assets/images/large/cc.gif");
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size: cover;
+}
+@media only screen and (max-device-width : 399px) {
+    .filecontainer{
+        flex-flow: column wrap;
+    }
+    .selectedfilecontainer{
+        margin: 2rem 0 0 0;
+    }
+    label, .selectedfilecontainer{
+        flex: 0 0 4.2rem;
+    }
+    .uploader{
+        right: 0;
+    }
+}

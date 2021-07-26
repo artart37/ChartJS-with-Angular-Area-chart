@@ -1,0 +1,35 @@
+.heightnormaliser{
+    min-height: calc(100vh - 100px);
+}
+header{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #3a0ca3;
+    color: #FFFFFF;
+    height: 50px;
+}
+header > .simpleheadline{
+    margin: 0;
+}
+main{
+    color: #03071e;
+    background-color: #FFFFFF;
+}
+footer{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #3a0ca3 ;
+    color: #FFFFFF;
+    height: 50px;
+}
+footer > .simpletext{
+    margin: 0;
+}
