@@ -80,9 +80,9 @@ export class ChartJsComponent implements OnDestroy {
   adjustlegend(){                                         //Adjust legend positioning for small screen sizes. We are not adjusting the property on resize for performance reasons.
     this.innerwidth = window.innerWidth;
     if (this.innerwidth > 530) {
-        return "right"
+      this.legendposition = "right"
       } else {
-        return "top"
+        this.legendposition = "top"
       }
   }
 
