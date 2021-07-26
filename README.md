@@ -25,3 +25,14 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Chart JS
+
+Run npm i chart.js to install chart.js
+Import and register the controllers, elements, scales and plugins from https://www.chartjs.org/docs/latest/getting-started/integration.html
+
+## JSON
+
+Upload a JSON file with a JSON format – wrapping the keys within double quotes, because In JSON, keys must be strings, written with double quotes - https://www.w3schools.com/js/js_json_syntax.asp
+
+The JSON file needs to be an array of objects with the following interface: "prevOrders": number, "ltvLift": number, "rating": string. Otherwise, the file won't be rendered.
