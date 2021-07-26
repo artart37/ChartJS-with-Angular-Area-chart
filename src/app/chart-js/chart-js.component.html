@@ -1,10 +1,11 @@
 <div class="sectionwrapper">
     <div class="central">
-        <h2 class="simpleheadline">Your awesome chart</h2>
         <div class="canvascontainer" *ngIf="toggler" @smoothappearance>
             <canvas id="canvasid"></canvas>
         </div>
-        <div *ngIf="!toggler" class="placeholder" @smoothappearance></div>
+        <div *ngIf="!toggler" class="placeholder" @smoothappearance>
+            <h2 class="simpleheadline">Please load a file</h2>
+        </div>
         <form class="filecontainer" #uploader ="ngForm">
             <section class="uploader">
                 <label for="uploadjson">

@@ -130,10 +130,15 @@ label:hover {
     border: 1.5px solid #8f8f8f;
 }
 .placeholder{
-    background-image: url("/assets/images/large/cc.gif");
-    background-repeat: no-repeat;
-    background-position:center center;
-    background-size: cover;
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #2090ff 0%, #846dde 100%);
+    color: #ffffff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
 }
 @media only screen and (max-device-width : 399px) {
     .filecontainer{
