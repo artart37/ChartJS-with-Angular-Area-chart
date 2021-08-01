@@ -1,28 +1,33 @@
 <div class="sectionwrapper">
     <div class="central">
+        <h2 class="simpleheadline">Errors: {{myinput.errors | json}}</h2>
+        <h2 class="simpleheadline">Filevalue: {{filevalue}}</h2>
+        <h2 class="simpleheadline">Myfile: {{myfile?.name}}</h2>
         <div class="canvascontainer" *ngIf="toggler" @smoothappearance>
             <canvas id="canvasid"></canvas>
         </div>
         <div *ngIf="!toggler" class="placeholder" @smoothappearance>
             <h2 class="simpleheadline">Please load a file</h2>
         </div>
+        <div class="allwrapper">
         <form class="filecontainer" #uploader ="ngForm">
             <section class="uploader">
                 <label for="uploadjson">
                     <input type="file" id="uploadjson" name="uploadjson" [(ngModel)] ="filevalue" #myinput="ngModel" (change)="myinput.errors?.isjsonerror?null:trackfile($event)" required isagoodfile>
                     <span>Load JSON</span>
-                </label> 
-                <span class="custommathint" *ngIf="myinput.valid || myinput.pristine" @materrorhint>Maximum File Size: 5120 kB</span>
-                <span class="custommathint" *ngIf="myinput.valid || myinput.pristine" @materrorhint>Only .json file formats are accepted</span>
-                <span class="custommaterror" *ngIf="myinput.errors?.required && (myinput.dirty || myinput.touched)" @materrorhint>A JSON file is required.</span>
-                <span class="custommaterror" *ngIf="myinput.errors?.isjsonerror && (myinput.dirty || myinput.touched)" @materrorhint>The selected file is not of a JSON extension.</span>
-                <span class="custommaterror" *ngIf="myinput.errors?.issizeerror && (myinput.dirty || myinput.touched)" @materrorhint>The file should not be larger than 5mb.</span>
-                <span class="custommaterror" *ngIf="myinput.errors?.isdatastructureerror && (myinput.dirty || myinput.touched)" @materrorhint>The loaded file does not have a proper data structure.</span>
+                </label>
             </section>
-            <section class="selectedfilecontainer" *ngIf="myinput.valid && myfile">
+            <section class="selectedfilecontainer" *ngIf="!myinput.control.hasError('required') && myfile">
                  <span class="delete" (click)="removefile()"></span>
-                 <span class="selectedfile">{{myfile?.name}}</span>
+                 <span class="selectedfile">{{myfile?myfile.name:null}}</span>
             </section>
-        </form>  
+        </form>
+        <span class="custommathint" *ngIf="myinput.valid || myinput.pristine" @materrorhint>Maximum File Size: 5120 kB</span>
+        <span class="custommathint" *ngIf="myinput.valid || myinput.pristine" @materrorhint>Only .json file formats are accepted</span>
+        <span class="custommaterror" *ngIf="myinput.errors?.required && (myinput.dirty || myinput.touched)" @materrorhint>A JSON file is required.</span>
+        <span class="custommaterror" *ngIf="myinput.errors?.isjsonerror && (myinput.dirty || myinput.touched)" @materrorhint>The selected file is not of a JSON extension.</span>
+        <span class="custommaterror" *ngIf="myinput.errors?.issizeerror && (myinput.dirty || myinput.touched)" @materrorhint>The file should not be larger than 5mb.</span>
+        <span class="custommaterror" *ngIf="myinput.errors?.isdatastructureerror && (myinput.dirty || myinput.touched)" @materrorhint>The loaded file does not have a proper data structure.</span>
+        </div>
     </div>
 </div>

@@ -32,6 +32,7 @@ import {
 import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { materrorhintanime, smoothappearance } from './animations/basicanime';
+import { Chartob, RatingandLtv, isChartob } from './interfaces/jsoninterfaces';
 Chart.register(
   ArcElement,
   LineElement,
@@ -67,9 +68,10 @@ Chart.register(
 export class ChartJsComponent implements OnDestroy {
   myfile!: File | null;
   filevalue: any;
+  keptfile:any;
   @ViewChild('myinput') filecontrol!: NgModel;
   myob$!: Observable<any>;
-  toggler:boolean=false;                                //A toggler for my canvas area. Binding the templates to the form validation statuses would be slightly more consuming in our case.
+  toggler:boolean=false;                                  //A toggler for my canvas area. Binding the templates to the form validation statuses would be slightly more time consuming in our case.
   mysubscription!: Subscription;
   jsondata!: JSON;
   chart!: Chart;
@@ -99,65 +101,82 @@ export class ChartJsComponent implements OnDestroy {
     this.chart?this.chart.destroy():null
     this.toggler=false;
   }
+
+  showFile(selectedfile: File) {
+    this.toggler = true;
+    this.myfile = selectedfile;
+  }
+ 
   trackfile(e: any) {
-    this.filevalue = e.target.value
+    this.filecontrol.control.statusChanges.subscribe(status=>console.log(status))
+    console.log(this.filevalue);    
     //Initilizing the selected file
     const filelist: FileList = e.target.files;
-    //The File interface provides information about files and allows JavaScript in a web page to access their content.
-    //A File object is a specific kind of a Blob, and can be used in any context that a Blob can.
-    const selectedfile: File = filelist[0]
-    //A const storing the actual filesize
-    const filesize: number = selectedfile.size;
-    this.myfile = selectedfile;
-    if (filesize <= 5000000) {
-      //Checking if a file is of a normal size
-      //Using the FileReader object to asynchronously read the contents of the selected json file
-      const filereader: FileReader = new FileReader()
-      //Because a File object is a specific kind of a Blob, and can be used in any context that a Blob can, we may teherefore, pass the selectedfile File object to the readastext function
-      filereader.readAsText(selectedfile)
-      //After the file is is successfully read
-      filereader.onload = (e: ProgressEvent) => {
-        try {
-          this.jsondata = JSON.parse(filereader.result!.toString())
-        } catch (error) {
-          this.filecontrol.control.setErrors({ isdatastructureerror: true })
-          return
-        }
-        //converting to JSON, in accordance with the requirement
-        //Checking if a good data has been loaded
-        Array.prototype.every.call(this.jsondata, (el) => {
-          const datastrchecker: boolean = !!((Object.prototype.hasOwnProperty.call(el, "rating") && Object.prototype.hasOwnProperty.call(el, "ltvLift") && Object.prototype.hasOwnProperty.call(el, "prevOrders")))
-          if (datastrchecker) {
-            this.toggler = true;
-            //Pause 50ms till the element is rendered back
+    //Check if a file has in fact been selected
+    if (filelist.length > 0) {
+      this.filevalue = e.target.value
+      //The File interface provides information about files and allows JavaScript in a web page to access their content.
+      //A File object is a specific kind of a Blob, and can be used in any context that a Blob can.
+      const selectedfile: File = filelist[0]
+      //A const storing the actual filesize
+      const filesize: number = selectedfile.size;
+      if (filesize <= 5000000) {
+        //Checking if a file is of a normal size
+        //Using the FileReader object to asynchronously read the contents of the selected json file
+        const filereader: FileReader = new FileReader()
+        //Because a File object is a specific kind of a Blob, and can be used in any context that a Blob can, we may teherefore, pass the selectedfile File object to the readastext function
+        filereader.readAsText(selectedfile)
+        //After the file is is successfully read
+        filereader.onload = (e: ProgressEvent) => {
+          try {
+            this.jsondata = JSON.parse(filereader.result!.toString())
+          } catch (error) {
+            this.removefile()
+            //Pause a little to net let required error override isdatastructureerror
             setTimeout(() => {
-              this.configchart(this.jsondata)
-            }, 0.01);
-          } else {
-            this.toggler = false;
-            this.filecontrol.control.setErrors({ isdatastructureerror: true })
+              this.filecontrol.control.setErrors({ isdatastructureerror: true })
+            }, 0);
+            return
           }
-        })
+          //Converting to JSON, in accordance with the requirement
+          //Checking if a good data has been loaded
+          Array.prototype.every.call(this.jsondata, (el: Chartob) => {
+            //Using a custom type guard function
+            if (isChartob(el)) {
+              this.showFile(selectedfile)
+              //Pause a little untill the element is rendered
+              setTimeout(() => {
+                this.configchart(this.jsondata)
+              }, 0.01);
+            } else {
+              this.removefile()
+              //Pause a little to net let required error override isdatastructureerror
+                setTimeout(() => {
+                  this.filecontrol.control.setErrors({ isdatastructureerror: true })
+                }, 0);
+            }
+          })
+        }
+      } else {
+        this.removefile()
+        //Pause a little to net let required error override issizeerror
+        setTimeout(() => {
+          this.filecontrol.control.setErrors({ issizeerror: true })
+        }, 0);
       }
-    } else {
-      this.toggler = false;
-      //Assigning errors to my control
-      this.filecontrol.control.setErrors({ issizeerror: true })
     }
-
-
   }
 
   constructor() {
-    if (Chart) { Chart.defaults.color = "#03071e" };
+    Chart.defaults.color = "#03071e";
   }
   //Preparing an appropriate data structure for our chart
   configchart(data: JSON) {
     //Create an observable from my JSON
     this.myob$ = of(data)
     this.mysubscription = this.myob$.pipe(
-      map((el) => { el.map((ob: any) => ob.prevOrders += " Previous orders"); return el })
-    ).subscribe((myfilearray: Array<any>) => {
+      map((el) => {el.map((ob: Chartob) => ob.prevOrders += " Previous orders"); return el })
+    ).subscribe((myfilearray: Array<Chartob>) => {
       //Generate the good data structure for my chart
       let goodarray = myfilearray.reduce((total: any, current: any) => {
         //A reusable function for adding data for each unique prevorder
@@ -181,7 +200,7 @@ export class ChartJsComponent implements OnDestroy {
           addnewitem()
           //Else, check if our array has the prevorder pending to be added, and if so, simply add to the array of rating and ltvlift
         } else {
-          total.forEach((element: any, index: number) => {
+          total.forEach((element: Chartob, index: number) => {
             if (Object.keys(element).includes(current.prevOrders)) {
               total[index][current.prevOrders].push({ rating: current.rating, ltvLift: current.ltvLift })
               //Else, if are at our last iteration over the good array, add the new prevorder doesn't exist in the goodarray
@@ -198,7 +217,7 @@ export class ChartJsComponent implements OnDestroy {
     )
   }
 
-  generatechart(chartarray:Array<any>) {
+  generatechart(chartarray:Array<Chartob>) {
   //Defining the variables for my chart
   let horizontallabels:Array<number> = [];
   let datasetlabel:Array<string> = [];
@@ -207,14 +226,14 @@ export class ChartJsComponent implements OnDestroy {
   let ytext:string = "LTV Lift"
   let xtext:string = "Review Score"
   
-  chartarray.forEach((element:any, index:number, arr:Array<any>)=>{
+  chartarray.forEach((element:any, index:number)=>{   
    //Initializing the array of data labels
    datasetlabel.push(...Object.keys(element))  
   //Initializing the datasets data, including the names
    datasets.push({
     label:datasetlabel[index],
     //It is important to sort, based on ratings, for a correct visual appearance
-    data:element[datasetlabel[index]].sort((a:any,b:any)=>a.rating-b.rating),
+    data:element[datasetlabel[index]].sort((a:RatingandLtv,b:RatingandLtv)=>a.rating-b.rating),
     fill:true,
     tension:0.1,
     backgroundColor:datasetlabel[index].includes("1")?"#4285f4":datasetlabel[index].includes('2')? "#ea4335":datasetlabel[index].includes("3")?"#fbbc04":"#34a853",
@@ -225,7 +244,7 @@ export class ChartJsComponent implements OnDestroy {
    }
   )
   //Initializing the array of unique rating figures
-   element[datasetlabel[index]].reduce((total:Array<number>, current:any)=>{
+   element[datasetlabel[index]].reduce((total:Array<number>, current:RatingandLtv)=>{
       total.includes(current.rating)?total:total.push(<number>current.rating)
      return horizontallabels = total
    },[])

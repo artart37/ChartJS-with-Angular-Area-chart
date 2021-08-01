@@ -7,15 +7,17 @@
     position: absolute;
     width: 0;
 }
+.allwrapper{
+    font-size: 1.6rem;
+    font-weight: 700;
+}
 
 .filecontainer{
     background-color: transparent;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     position: relative;
     margin: 4rem 0 0 0;
-    font-size: 1.6rem;
-    font-weight: 700;
     text-decoration: none;
     outline: none;
     user-select: none;
@@ -42,6 +44,7 @@
     font-weight: 700;
     padding: 0 36px;
     height: 100%;
+    min-width: 175px;
     min-height: 4.2rem;
     flex: 0 0 72px;
     position: relative;
@@ -86,6 +89,8 @@ label{
     background: #3f37c9;
     color: #FFFFFF;
     cursor: pointer;
+    box-sizing: border-box;
+    min-width: 175px;
     min-height: 4.2rem;
     border-radius: 2.1rem;
     display: flex;
@@ -106,9 +111,11 @@ label:hover {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    font-size: 75%;
+    font-size: 0.75em;
     color: rgba(0,0,0,.54);
     display: block;
+    position: relative;
+    right: 33px;
     margin: 7px 0 0 0
 }
 .custommaterror{
@@ -117,9 +124,11 @@ label:hover {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    font-size: 75%;
+    font-size: 0.75em;
     color: #f44336;
     display: block;
+    position: relative;
+    right: 33px;
     margin: 7px 0 0 0
 }
 .canvascontainer, .placeholder{
@@ -150,7 +159,7 @@ label:hover {
     label, .selectedfilecontainer{
         flex: 0 0 4.2rem;
     }
-    .uploader{
+    .uploader, .custommaterror, .custommathint{
         right: 0;
     }
 }
